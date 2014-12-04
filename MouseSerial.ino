@@ -1,8 +1,7 @@
-// SerialMouse sketch
-//
+// MouseSerial.ino
+
 // Corresponding Processing file: Processing_2014_11_13
-//
-// Andreas Tairych
+
 // DOOM game controller project
 // Reads two potentiometers for two mouse axes
 // Reads a button for left click
@@ -10,27 +9,30 @@
 // Reads one button for backward movement
 // Generates a string and sends it via serial port to be read by the above Processing file
 // Reads a button for enabling calibration mode
-// 5/11/2014
-// Last modified: 04/12/2014, by Jeremie Bannwarth
+
+// Created: Andreas Tairych, 05/11/2014
+// Last modified: Jeremie Bannwarth, 05/12/2014 
 
 // #define DEBUG
 
-#include "StretchSenseGlove.h"
+#include "Glove.h"
 
-const int enablePin = 2; // Enable pin; LOW on digital pin enables mouse
-const int clickPin  = 3; // Left click; LOW on digital pin activates left click
-const int potXPin   = 5; // Analog pin for x-axis pot
-const int potYPin   = 4; // Analog pin for y-axis pot
+// Digital pins, activated when pulled LOW
+const int enablePin = 2; // Enable pin
+const int clickPin  = 3; // Left click
+const int fwdPin    = 4; // Forward movement
+const int bwdPin    = 5; // Backward movement
+const int calPin    = 6; // Enable sensor calibration
 
-const int fwdPin   = 4; // Digital pin forward movement
-const int bwdPin  = 5; // Digital pin backward movement
+// Analog pins
+const int potYPin   = 4; // Y-axis pot
+const int potXPin   = 5; // X-axis pot
 
-const int calPin    = 6; // Digital pin to enable sensor calibration
-
-// StretchSenseGlove object keeps track of sensor measurements and
+// Glove object keeps track of sensor measurements and
 // handles data transfer
-StretchSenseGlove StretchSenseGlove;
+Glove Glove;
 
+// 
 int transferCounter = 0; // Counter used to keep track of when to transfer data
 const int transferThreshold = 4; // Transfer every 5th sample (20 Hz)
 
@@ -57,10 +59,10 @@ void setup()
     // within the allocated 10ms
     Serial.begin(57600);
 
-    StretchSenseGlove.begin(enablePin, clickPin, fwdPin, bwdPin, calPin,
+    Glove.begin(enablePin, clickPin, fwdPin, bwdPin, calPin,
         potXPin, potYPin);
 
-    sei(); // enable interrupts
+    sei(); // Enable interrupts
 } // void setup()
 
 void loop()
@@ -73,11 +75,11 @@ ISR(TIMER1_COMPA_vect)
 {
     sei();
 
-    StretchSenseGlove.update();
+    Glove.update();
 
     if (transferCounter >= transferThreshold)
     {
-        StretchSenseGlove.transferData();
+        Glove.transferData();
         transferCounter = 0;
     }
     else

@@ -5,7 +5,6 @@
 // Available filters: Chebyshev & Bessel low pass filter (1st & 2nd order)
 
 // Modified by: Jérémie Bannwarth, 04/12/2014
-// For: ABI
 
 #include "SignalFilter.h"
 

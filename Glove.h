@@ -1,9 +1,14 @@
-#ifndef STRETCHSENSEGLOVE_H
-#define STRETCHSENSEGLOVE_H
+// Glove.h
+
+// Created: Jeremie Bannwarth, 04/12/2014 
+// Last modified: Jeremie Bannwarth, 05/12/2014 
+
+#ifndef GLOVE_H
+#define GLOVE_H
 #include <Arduino.h>
 #include "SignalFilter.h"
 
-class StretchSenseGlove
+class Glove
 {
     private:
         int enablePin;
@@ -29,7 +34,7 @@ class StretchSenseGlove
         SignalFilter FilterY;
 
     public:
-        StretchSenseGlove();
+        Glove();
         void begin(int enablePinNew, 
                    int clickPinNew,
                    int fwdPinNew,

@@ -1,7 +1,12 @@
-#include "StretchSenseGlove.h"
+// Glove.cpp
+
+// Created: Jeremie Bannwarth, 04/12/2014 
+// Last modified: Jeremie Bannwarth, 05/12/2014 
+
+#include "Glove.h"
 
 // Constructor
-StretchSenseGlove::StretchSenseGlove()
+Glove::Glove()
     : enablePin(0), clickPin(0), fwdPin(0), potXPin(0),
     potYPin(0), bwdPin(0), calPin(0), enablePressed(false),
     clickPressed(false), fwdPressed(false), bwdPressed(false),
@@ -16,9 +21,9 @@ StretchSenseGlove::StretchSenseGlove()
     FilterY.begin();
     FilterY.setFilter('b');
     FilterY.setOrder(1);
-} // StretchSenseGlove::StretchSenseGlove()
+} // Glove::Glove()
 
-void StretchSenseGlove::begin(int enablePinNew, 
+void Glove::begin(int enablePinNew, 
     int clickPinNew, int fwdPinNew, int bwdPinNew, int calPinNew,
     int potXPinNew, int potYPinNew)
 {
@@ -27,7 +32,7 @@ void StretchSenseGlove::begin(int enablePinNew,
     fwdPin = fwdPinNew;
     bwdPin = bwdPinNew;
     calPin = calPinNew;
-    potXPin = potYPinNew;
+    potXPin = potXPinNew;
     potYPin = potYPinNew;
 
     // Configuration of digital inputs
@@ -46,10 +51,10 @@ void StretchSenseGlove::begin(int enablePinNew,
 
     pinMode (calPin, INPUT);
     digitalWrite(calPin, HIGH);
-} // void StretchSenseGlove::begin()
+} // void Glove::begin()
 
 // Methods
-void StretchSenseGlove::update()
+void Glove::update()
 {
     // Update analog inputs
     xRaw = ( 512 - analogRead(potXPin) ) / 2;
@@ -84,9 +89,9 @@ void StretchSenseGlove::update()
     {
         calPressed = true;
     } 
-} // void StretchSenseGlove::update()
+} // void Glove::update()
 
-void StretchSenseGlove::transferData()
+void Glove::transferData()
 {
     Serial.print("Data,");
     Serial.print(xFiltd,DEC);
@@ -164,4 +169,4 @@ void StretchSenseGlove::transferData()
     fwdPressed    = false;
     bwdPressed    = false;
     calPressed    = false;
-} // void StretchSenseGlove::transferData()
+} // void Glove::transferData()
