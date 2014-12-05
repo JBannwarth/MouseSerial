@@ -3,17 +3,19 @@
 // Corresponding Processing file: Processing_2014_11_13
 
 // DOOM game controller project
-// Reads two potentiometers for two mouse axes
-// Reads a button for left click
-// Reads one button for forward movement
-// Reads one button for backward movement
-// Generates a string and sends it via serial port to be read by the above Processing file
-// Reads a button for enabling calibration mode
+// - Reads two potentiometers for two mouse axes
+// - Reads a button for left click
+// - Reads one button for forward movement
+// - Reads one button for backward movement
+// - Generates a string and sends it via serial port to be read  
+//   by the above Processing file
+// - Reads a button for enabling calibration mode
 
 // Created: Andreas Tairych, 05/11/2014
 // Last modified: Jeremie Bannwarth, 05/12/2014 
 
 // #define DEBUG
+#define USE_RAW_DATA
 
 #include "Glove.h"
 
@@ -32,9 +34,9 @@ const int potXPin   = 5; // X-axis pot
 // handles data transfer
 Glove Glove;
 
-// 
-int transferCounter = 0; // Counter used to keep track of when to transfer data
-const int transferThreshold = 4; // Transfer every 5th sample (20 Hz)
+// Counter used to keep track of when to transfer data
+int transferCounter = 0; 
+const int transferThreshold = 0; // Transfer every 5th sample (20 Hz)
 
 void setup()
 {
@@ -79,7 +81,11 @@ ISR(TIMER1_COMPA_vect)
 
     if (transferCounter >= transferThreshold)
     {
-        Glove.transferData();
+        #ifdef USE_RAW_DATA
+            Glove.transferRawData();
+        #else
+            Glove.transferFilteredData();
+        #endif
         transferCounter = 0;
     }
     else

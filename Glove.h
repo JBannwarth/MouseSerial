@@ -43,7 +43,8 @@ class Glove
                    int potXPin,
                    int potYPin);
         void update();
-        void transferData();
+        void transferFilteredData();
+        void transferRawData();
 };
 
 #endif

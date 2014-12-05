@@ -23,9 +23,8 @@ Glove::Glove()
     FilterY.setOrder(1);
 } // Glove::Glove()
 
-void Glove::begin(int enablePinNew, 
-    int clickPinNew, int fwdPinNew, int bwdPinNew, int calPinNew,
-    int potXPinNew, int potYPinNew)
+void Glove::begin(int enablePinNew, int clickPinNew, int fwdPinNew,
+     int bwdPinNew, int calPinNew, int potXPinNew, int potYPinNew)
 {
     enablePin = enablePinNew;
     clickPin = clickPinNew;
@@ -91,72 +90,80 @@ void Glove::update()
     } 
 } // void Glove::update()
 
-void Glove::transferData()
+void Glove::transferFilteredData()
 {
+    // Send data in the format:
+    // Data,x,y,enable,click,fwd,bwd,cal,
     Serial.print("Data,");
     Serial.print(xFiltd,DEC);
     Serial.print(",");
     Serial.print(yFiltd,DEC);
     Serial.print(",");
 
-    // Note: digital inputs are switched to GND when button pressed
-    // therefore send 1 when buttons are pressed and 0 otherwise
-
     // Enable button
-    if (enablePressed)
-    {
-        Serial.print(1);
-    }
-    else  
-    {
-       Serial.print(0);
-    }
+    Serial.print(enablePressed,DEC);
     Serial.print(",");
 
     // Left mouse button
-    if (clickPressed)
-    {
-        Serial.print(1);
-    }
-    else  
-    {
-        Serial.print(0);
-    }
+    Serial.print(clickPressed,DEC);
     Serial.print(",");
 
     // Forward movement button
-    if (fwdPressed)
-    {
-        Serial.print(1);
-    }
-    else
-    {
-        Serial.print(0);
-    }
+    Serial.print(fwdPressed,DEC);
     Serial.print(",");
 
     // Backward movement button
-    if(bwdPressed)
-    {
-        Serial.print(1);
-    }
-    else  
-    {
-        Serial.print(0);
-    }
+    Serial.print(bwdPressed,DEC);
     Serial.print(",");
 
     // Calibration button
-    if(calPressed)
-    {
-        Serial.print(1);
-    }
-    else  
-    {
-        Serial.print(0);
-    }
+    Serial.print(calPressed,DEC);
 
-    #ifdef DEBUG
+    #ifdef DEBUG_GLOVE
+        Serial.print(",");
+        Serial.print(millis());
+    #endif
+
+    Serial.println(",");
+
+    // Reinitialise button buffers
+    enablePressed = false;
+    clickPressed  = false;
+    fwdPressed    = false;
+    bwdPressed    = false;
+    calPressed    = false;
+} // void Glove::transferData()
+
+void Glove::transferRawData()
+{
+    // Send data in the format:
+    // Data,x,y,enable,click,fwd,bwd,cal,
+    Serial.print("Data,");
+    Serial.print(xRaw,DEC);
+    Serial.print(",");
+    Serial.print(yRaw,DEC);
+    Serial.print(",");
+
+    // Enable button
+    Serial.print(enablePressed,DEC);
+    Serial.print(",");
+
+    // Left mouse button
+    Serial.print(clickPressed,DEC);
+    Serial.print(",");
+
+    // Forward movement button
+    Serial.print(fwdPressed,DEC);
+    Serial.print(",");
+
+    // Backward movement button
+    Serial.print(bwdPressed,DEC);
+    Serial.print(",");
+
+    // Calibration button
+    Serial.print(calPressed,DEC);
+
+    #ifdef DEBUG_GLOVE
         Serial.print(",");
         Serial.print(millis());
     #endif

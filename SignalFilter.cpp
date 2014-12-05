@@ -63,7 +63,7 @@ int SignalFilter::runChebyshev(int data)
 	{
 		// Ripple -3dB
 		_v[0] = _v[1];
-		long tmp = ((((data * 3269048L) >>  2)	// = (3.897009118e-1 * data)
+		long tmp = ((((data * 3269048L) >>  2)	// = ( 3.897009118e-1 * data)
 			+ ((_v[0] * 3701023L) >> 3)			// + ( 0.2205981765*v[0])
 			) + 1048576) >> 21;					// Round and downshift fixed point /2097152
 		_v[1]= (int)tmp;
