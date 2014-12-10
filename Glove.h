@@ -11,13 +11,13 @@
 class Glove
 {
     private:
-        int enablePin;
-        int clickPin;
-        int fwdPin;
-        int bwdPin;
-        int calPin;
-        int potXPin;
-        int potYPin;
+        int16_t enablePin;
+        int16_t clickPin;
+        int16_t fwdPin;
+        int16_t bwdPin;
+        int16_t calPin;
+        int16_t potXPin;
+        int16_t potYPin;
 
         bool enablePressed;
         bool clickPressed;
@@ -25,23 +25,23 @@ class Glove
         bool bwdPressed;
         bool calPressed;
     
-        int xRaw;
-        int yRaw;
-        int xFiltd;
-        int yFiltd;
+        int16_t xRaw;
+        int16_t yRaw;
+        int16_t xFiltd;
+        int16_t yFiltd;
 
         SignalFilter FilterX;
         SignalFilter FilterY;
 
     public:
         Glove();
-        void begin(int enablePinNew, 
-                   int clickPinNew,
-                   int fwdPinNew,
-                   int bwdPinNew,
-                   int calPinNew,
-                   int potXPin,
-                   int potYPin);
+        void begin(int16_t enablePinNew, 
+                   int16_t clickPinNew,
+                   int16_t fwdPinNew,
+                   int16_t bwdPinNew,
+                   int16_t calPinNew,
+                   int16_t potXPin,
+                   int16_t potYPin);
         void update();
         void transferFilteredData();
         void transferRawData();

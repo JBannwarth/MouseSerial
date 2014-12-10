@@ -15,32 +15,33 @@
 // Last modified: Jeremie Bannwarth, 05/12/2014 
 
 // #define DEBUG
-#define USE_RAW_DATA
+// #define USE_RAW_DATA
+// #define DEBUG_GLOVE
 
 #include "Glove.h"
 
 // Digital pins, activated when pulled LOW
-const int enablePin = 2; // Enable pin
-const int clickPin  = 3; // Left click
-const int fwdPin    = 4; // Forward movement
-const int bwdPin    = 5; // Backward movement
-const int calPin    = 6; // Enable sensor calibration
+const int16_t enablePin = 2; // Enable pin
+const int16_t clickPin  = 3; // Left click
+const int16_t fwdPin    = 4; // Forward movement
+const int16_t bwdPin    = 5; // Backward movement
+const int16_t calPin    = 6; // Enable sensor calibration
 
 // Analog pins
-const int potYPin   = 4; // Y-axis pot
-const int potXPin   = 5; // X-axis pot
+const int16_t potYPin   = 4; // Y-axis pot
+const int16_t potXPin   = 5; // X-axis pot
 
 // Glove object keeps track of sensor measurements and
 // handles data transfer
 Glove Glove;
 
 // Counter used to keep track of when to transfer data
-int transferCounter = 0; 
-const int transferThreshold = 0; // Transfer every 5th sample (20 Hz)
+int16_t transferCounter = 0; 
+const int16_t transferThreshold = 4; // Transfer every 5th sample (20 Hz)
 
 void setup()
 {
-    // Configuration of interrupts
+    // -------------- Configuration of interrupts --------------
     cli(); // Disable interrupts
 
     // Set timer1 interrupt at 100Hz
@@ -48,7 +49,7 @@ void setup()
     TCCR1B = 0;
     // Initialize counter value to 0
     TCNT1  = 0;
-    // Set compare match register for 1ms increments
+    // Set compare match register for 10ms increments
     OCR1A = 19999; // = (16*10^6) / (100*8) - 1
     // Turn on CTC mode
     TCCR1B |= (1 << WGM12);
@@ -60,6 +61,24 @@ void setup()
     // High baud rate is required to transfer all the required data 
     // within the allocated 10ms
     Serial.begin(57600);
+
+    // --------------- Initialise pins and glove ---------------
+    // Configuration of digital inputs
+    // Pins are high by default, turn on pull-ups
+    pinMode(enablePin, INPUT);
+    digitalWrite(enablePin, HIGH);
+
+    pinMode (clickPin, INPUT);
+    digitalWrite(clickPin, HIGH);
+
+    pinMode (fwdPin, INPUT);
+    digitalWrite(fwdPin, HIGH);
+
+    pinMode (bwdPin, INPUT);
+    digitalWrite(bwdPin, HIGH);
+
+    pinMode (calPin, INPUT);
+    digitalWrite(calPin, HIGH);
 
     Glove.begin(enablePin, clickPin, fwdPin, bwdPin, calPin,
         potXPin, potYPin);

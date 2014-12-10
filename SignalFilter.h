@@ -9,6 +9,9 @@
 #ifndef SignalFilter_h
 #define SignalFilter_h
 #include <Arduino.h>
+#include "FilterCoefficients.h"
+
+#define NUMBER_SAMPLES 16
 
 class SignalFilter
 {
@@ -16,25 +19,28 @@ class SignalFilter
         SignalFilter();
         void begin();
 
-        void setFilter(char filter); // 'c' -> Chebyshev, 'b' -> Bessel
-        void setOrder(int order);    // Only 1 or 2
+        void setFilter(uint8_t filter); // 'c' -> Chebyshev, 'b' -> Bessel, 'o' -> other (custom)
+        void setOrder(int16_t order);    // Only 1 or 2
         void printSamples();
 
-        int run(int data);
+        int16_t run(int16_t data);
 
     private:
-        int runChebyshev(int data);
-        int runBessel(int data);
-        int runMedian(int data);
-        int runGrowing(int data);
-        int runGrowing2(int data);
-        char _filter;
-        int _order;
-        int _average;
-        int _median;
-        int _helper;
-        int _counter;
+        int16_t run2ndOrderSection(int16_t data);
+        int16_t runChebyshev(int16_t data);
+        int16_t runBessel(int16_t data);
+        int16_t runMedian(int16_t data);
+        int16_t runRollingMean(int16_t data);
+        uint8_t _filter;
+        int16_t _order;
+        int16_t _average;
+        int16_t _median;
+        int16_t _helper;
+        int16_t _counter;
 
-        int _v[3];
+        int16_t _v[3];
+        int16_t _vMean[NUMBER_SAMPLES];
+        int16_t _indexMean;
+        int16_t _sumMean;
 };
 #endif

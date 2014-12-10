@@ -3,6 +3,8 @@
 // Created: Jeremie Bannwarth, 04/12/2014 
 // Last modified: Jeremie Bannwarth, 05/12/2014 
 
+// #define DEBUG_GLOVE
+
 #include "Glove.h"
 
 // Constructor
@@ -15,16 +17,17 @@ Glove::Glove()
 {
     // Filters initialisation
     FilterX.begin();
-    FilterX.setFilter('b');
-    FilterX.setOrder(1);
+    FilterX.setFilter('o');
+    FilterX.setOrder(2);
 
     FilterY.begin();
-    FilterY.setFilter('b');
-    FilterY.setOrder(1);
+    FilterY.setFilter('o');
+    FilterY.setOrder(2);
 } // Glove::Glove()
 
-void Glove::begin(int enablePinNew, int clickPinNew, int fwdPinNew,
-     int bwdPinNew, int calPinNew, int potXPinNew, int potYPinNew)
+void Glove::begin(int16_t enablePinNew, int16_t clickPinNew,
+    int16_t fwdPinNew, int16_t bwdPinNew, int16_t calPinNew,
+    int16_t potXPinNew, int16_t potYPinNew)
 {
     enablePin = enablePinNew;
     clickPin = clickPinNew;
@@ -33,23 +36,6 @@ void Glove::begin(int enablePinNew, int clickPinNew, int fwdPinNew,
     calPin = calPinNew;
     potXPin = potXPinNew;
     potYPin = potYPinNew;
-
-    // Configuration of digital inputs
-    // Pins are high by default, turn on pull-ups
-    pinMode(enablePin, INPUT);
-    digitalWrite(enablePin, HIGH);
-
-    pinMode (clickPin, INPUT);
-    digitalWrite(clickPin, HIGH);
-
-    pinMode (fwdPin, INPUT);
-    digitalWrite(fwdPin, HIGH);
-
-    pinMode (bwdPin, INPUT);
-    digitalWrite(bwdPin, HIGH);
-
-    pinMode (calPin, INPUT);
-    digitalWrite(calPin, HIGH);
 } // void Glove::begin()
 
 // Methods
@@ -100,6 +86,13 @@ void Glove::transferFilteredData()
     Serial.print(yFiltd,DEC);
     Serial.print(",");
 
+    #ifdef DEBUG_GLOVE
+        Serial.print(xRaw,DEC);
+        Serial.print(",");
+        Serial.print(yRaw,DEC);
+        Serial.print(",");
+    #endif
+
     // Enable button
     Serial.print(enablePressed,DEC);
     Serial.print(",");
@@ -119,10 +112,10 @@ void Glove::transferFilteredData()
     // Calibration button
     Serial.print(calPressed,DEC);
 
-    #ifdef DEBUG_GLOVE
-        Serial.print(",");
-        Serial.print(millis());
-    #endif
+    // #ifdef DEBUG_GLOVE
+    //     Serial.print(",");
+    //     Serial.print(millis());
+    // #endif
 
     Serial.println(",");
 
